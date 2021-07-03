@@ -1,0 +1,18 @@
+# Stage 1 Creating a temporary base image
+FROM openjdk:8 AS compiler
+
+COPY /source /app
+
+WORKDIR /app
+
+RUN javac HelloWorld.java
+
+
+# Stage 2
+FROM mcr.microsoft.com/java/jre:15-zulu-alpine
+
+WORKDIR /app
+
+COPY --from=compiler /app/HelloWorld.class .
+
+CMD ["java", "HelloWorld"]
